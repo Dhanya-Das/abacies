@@ -115,10 +115,54 @@ add_action( 'rest_api_init', function () {
     'callback' => 'get_products_postType',
   ) );
 } );
+/*
+*API for Header Menus
+*/
+function get_header_menu_list() {
+  $menuLocations = get_nav_menu_locations();
+  $menuID = $menuLocations['primary'];
+  $menus = [];
+  
+  $primaryNav = wp_get_nav_menu_items($menuID);
+  foreach ( $primaryNav as $navItem ) {
+  
+    $menu['title'] = $navItem->title;
+    $menu['url'] = $navItem->url;
+    $menu['ID'] = $navItem->ID;
+    array_push($menus, $menu);
+  
+  }
+  return $menus;
+}
+  
+add_action( 'rest_api_init', function () {
+  register_rest_route( 'menu/v1', '/header-menu', array(
+    'methods' => 'GET',
+    'callback' => 'get_header_menu_list',
+  ) );
+} );
 
-add_action('init', 'init_test');
+// add_action('init', 'init_test');
 function init_test(){
-  echo "hello";
+$menuLocations = get_nav_menu_locations();
+$menuID = $menuLocations['primary'];
+$menus = [];
+
+$primaryNav = wp_get_nav_menu_items($menuID);
+foreach ( $primaryNav as $navItem ) {
+
+  $menu['title'] = $navItem->title;
+  $menu['url'] = $navItem->url;
+  array_push($menus, $menu);
+
+  print_r($navItem);
+}
+
+ 
+ 
 
 }
+
+
+
 
